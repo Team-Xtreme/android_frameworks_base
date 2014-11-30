@@ -142,4 +142,6 @@
     <string name="quick_settings_music_label">Music</string>
     <string name="quick_settings_music_play">Play</string>
     <string name="quick_settings_music_pause">Pause</string>
+
+    <string name="accessibility_data_connection_hspap">HSPA+</string>
 </resources>
