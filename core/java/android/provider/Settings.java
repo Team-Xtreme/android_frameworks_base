@@ -4433,6 +4433,13 @@ public final class Settings {
         public static final String POWERMENU_LS_USERS ="powermenu_ls_users";
 
         /**
+         * Whether to display the power menu On The Go option on a secured lockscreen
+         *
+         * @hide
+         */
+        public static final String POWERMENU_LS_ONTHEGO = "powermenu_ls_onthego";
+
+        /**
          * Whether to display the power menu airplane mode option on a secured lockscreen
          *
          * @hide
@@ -4717,6 +4724,36 @@ public final class Settings {
          * @hide
          */
         public static final String SHOW_FOURG_ICON = "show_fourg_icon";
+
+        /**
+         * If On-The-Go should be displayed at the power menu.
+         *
+         * @hide
+         */
+        public static final String POWERMENU_ONTHEGO = "powermenu_onthego";
+
+        /**
+         * The alpha value of the On-The-Go overlay.
+         *
+         * @hide
+         */
+        public static final String ON_THE_GO_ALPHA = "on_the_go_alpha";
+
+        /**
+         * Whether the service should restart itself or not.
+         *
+         * @hide
+         */
+        public static final String ON_THE_GO_SERVICE_RESTART = "on_the_go_service_restart";
+
+        /**
+         * The camera instance to use.
+         * 0 = Rear Camera
+         * 1 = Front Camera
+         *
+         * @hide
+         */
+        public static final String ON_THE_GO_CAMERA = "on_the_go_camera";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
