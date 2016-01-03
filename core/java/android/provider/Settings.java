@@ -4467,6 +4467,18 @@ public final class Settings {
          */
         public static final String POWERMENU_SCREENRECORD = "powermenu_screenrecord";
 
+	/**
+         * Whether to display clock while recents are in full screen
+         * @hide
+         */
+        public static final String RECENTS_FULL_SCREEN_CLOCK = "recents_full_screen_clock";
+
+        /**
+         * Whether to display clock while recents are in full screen
+         * @hide
+         */
+        public static final String RECENTS_FULL_SCREEN_DATE = "recents_full_screen_date";
+
         /**
          * Whether to display the power menu advanced reboot option on a secured lockscreen
          *
