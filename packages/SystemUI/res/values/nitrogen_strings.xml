@@ -175,4 +175,11 @@
     <string name="accessibility_quick_settings_running_services">Open Running Services screen.</string>
 
     <string name="quick_settings_sound_search">Sound search</string>
+
+     <!-- Sync QS Tile -->
+    <string name="quick_settings_sync_label">Sync</string>
+    <string name="accessibility_quick_settings_sync_off">Sync off</string>
+    <string name="accessibility_quick_settings_sync_on">Sync on</string>
+    <string name="accessibility_quick_settings_sync_changed_off">Sync turned off</string>
+    <string name="accessibility_quick_settings_sync_changed_on">Sync turned on</string>
 </resources>
