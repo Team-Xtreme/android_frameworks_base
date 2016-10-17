@@ -41,6 +41,7 @@ import com.android.systemui.qs.tiles.IntentTile;
 import com.android.systemui.qs.tiles.LocationTile;
 import com.android.systemui.qs.tiles.LteTile;
 import com.android.systemui.qs.tiles.MusicTile;
+import com.android.systemui.qs.tiles.NavigationBarTile;
 import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.NightDisplayTile;
 import com.android.systemui.qs.tiles.PictureInPictureTile;
@@ -103,6 +104,7 @@ public class QSFactoryImpl implements QSFactory {
         else if (tileSpec.equals("soundsearch")) return new SoundSearchTIle(mHost);
         else if (tileSpec.equals("sync")) return new SyncTile(mHost);
         else if (tileSpec.equals("weather")) return new WeatherTile(mHost);
+        else if (tileSpec.equals("navigation")) return new NavigationBarTile(mHost);
         // Intent tiles.
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(mHost, tileSpec);
         else if (tileSpec.startsWith(CustomTile.PREFIX)) return CustomTile.create(mHost, tileSpec);
