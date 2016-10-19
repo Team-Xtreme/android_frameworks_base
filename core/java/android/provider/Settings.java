@@ -4009,6 +4009,32 @@ public final class Settings {
          * the setting value. See an example above.
          */
 
+
+        /**
+         * Statusbar Custom logos
+         * @hide
+         */
+        public static final String SHOW_CUSTOM_LOGO = "show_custom_logo";
+
+	    /**
+         * Statusbar Custom logos Color
+         * @hide
+         */
+
+	    public static final String CUSTOM_LOGO_COLOR = "custom_logo_color";
+
+ 	    /**
+         * Take your Pick 
+         * @hide
+         */
+        public static final String CUSTOM_LOGO_STYLE = "custom_logo_style";
+
+ 	    /**
+         * Position of Custom logo
+         * @hide
+         */
+        public static final String CUSTOM_LOGO_POSITION = "custom_logo_position";
+
         /**
          * Whether allowing pocket service to register sensors and dispatch informations.
          *   0 = disabled

@@ -32,7 +32,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
     private final PhoneStatusBarView mView;
     private final float mIconAlphaWhenOpaque;
 
-    private View mLeftSide, mStatusIcons, mSignalCluster, mBattery, mClock, mLeftClock, mNetworkTraffic, mWeatherTextView, mWeatherImageView;
+    private View mLeftSide, mStatusIcons, mSignalCluster, mBattery, mClock, mLeftClock, mNetworkTraffic, mWeatherTextView, mWeatherImageView, mCLogo, mCLogoRight;
 
     private Animator mCurrentAnimation;
 
@@ -53,6 +53,8 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
         mNetworkTraffic = mView.findViewById(R.id.networkTraffic);
         mWeatherTextView = mView.findViewById(R.id.weather_temp);
         mWeatherImageView = mView.findViewById(R.id.weather_image);
+        mCLogo = mView.findViewById(R.id.custom);
+        mCLogoRight = mView.findViewById(R.id.custom_right);
         applyModeBackground(-1, getMode(), false /*animate*/);
         applyMode(getMode(), false /*animate*/);
     }
@@ -101,7 +103,9 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
                     animateTransitionTo(mLeftClock, newAlphaBC),
                     animateTransitionTo(mNetworkTraffic, newAlpha),
                     animateTransitionTo(mWeatherTextView, newAlphaBC),
-                    animateTransitionTo(mWeatherImageView, newAlphaBC)
+                    animateTransitionTo(mWeatherImageView, newAlphaBC),
+                    animateTransitionTo(mCLogo, newAlphaBC),
+                    animateTransitionTo(mCLogoRight, newAlphaBC)
                     );
             if (isLightsOut(mode)) {
                 anims.setDuration(LIGHTS_OUT_DURATION);
@@ -118,6 +122,8 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
             mLeftClock.setAlpha(newAlphaBC);
             mWeatherTextView.setAlpha(newAlphaBC);
             mWeatherImageView.setAlpha(newAlphaBC);
+            mCLogo.setAlpha(newAlphaBC);
+            mCLogoRight.setAlpha(newAlphaBC);
         }
     }
 }

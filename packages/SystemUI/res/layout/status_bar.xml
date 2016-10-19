@@ -68,6 +68,17 @@
             android:visibility="gone"
             android:singleLine="true"/>
 
+        <ImageView
+                 android:id="@+id/custom"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:paddingEnd="4dip"
+                 android:src="@drawable/custom"
+                 android:scaleType="center"
+                 android:visibility="gone"
+          />
+
+
         <!-- The alpha of this area is controlled from both PhoneStatusBarTransitions and
              PhoneStatusBar (DISABLE_NOTIFICATION_ICONS). -->
         <com.android.systemui.statusbar.AlphaOptimizedFrameLayout
@@ -119,6 +130,16 @@
                 android:paddingEnd="@dimen/status_bar_clock_end_padding"
                 android:gravity="center_vertical|start"
                 />
+
+            <ImageView
+                 android:id="@+id/custom_right"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:paddingEnd="4dip"
+                 android:src="@drawable/custom"
+                 android:scaleType="center"
+                 android:visibility="gone"
+              />
         </com.android.keyguard.AlphaOptimizedLinearLayout>
     </LinearLayout>
 

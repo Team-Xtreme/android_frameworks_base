@@ -25,6 +25,8 @@ import android.app.StatusBarManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.ContentObserver;
+import android.graphics.drawable.Drawable;
+import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.UserHandle;
@@ -80,9 +82,16 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private View mWeatherImageView;
     private View mWeatherTextView;
     private int mShowWeather;
-
     private int mTickerEnabled;
     private View mTickerViewFromStub;
+
+    // Custom Logos
+    private ImageView mCLogo;
+    private ImageView mCLogoRight;
+    private int mCustomlogoStyle;
+    private int mCustomLogoPos;
+
+    private final Handler mHandler = new Handler();
 
     // Custom Carrier
     private View mCustomCarrierLabel;
@@ -151,6 +160,12 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             mContentResolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP),
                     false, this, UserHandle.USER_ALL);
+            getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.CUSTOM_LOGO_STYLE),
+                    false, this, UserHandle.USER_ALL);
+            getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.CUSTOM_LOGO_POSITION),
+
         }
 
         @Override
@@ -199,6 +214,10 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mLeftClock = mStatusBar.findViewById(R.id.left_clock);
         Dependency.get(DarkIconDispatcher.class).addDarkReceiver(mSignalClusterView);
         mCustomCarrierLabel = mStatusBar.findViewById(R.id.statusbar_carrier_text);
+        mCLogo = (ImageView) mStatusBar.findViewById(R.id.custom);
+        mCLogoRight = (ImageView) mStatusBar.findViewById(R.id.custom_right);
+        Dependency.get(DarkIconDispatcher.class).addDarkReceiver(mCLogo);
+        Dependency.get(DarkIconDispatcher.class).addDarkReceiver(mCLogoRight);
         mWeatherTextView = mStatusBar.findViewById(R.id.weather_temp);
         mWeatherImageView = mStatusBar.findViewById(R.id.weather_image);
         updateSettings(false);
@@ -234,6 +253,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         super.onDestroyView();
         Dependency.get(DarkIconDispatcher.class).removeDarkReceiver(mSignalClusterView);
         Dependency.get(StatusBarIconController.class).removeIconGroup(mDarkIconManager);
+        Dependency.get(DarkIconDispatcher.class).removeDarkReceiver(mCLogo);
+        Dependency.get(DarkIconDispatcher.class).removeDarkReceiver(mCLogoRight);
         if (mNetworkController.hasEmergencyCryptKeeperText()) {
             mNetworkController.removeCallback(mSignalCallback);
         }
@@ -308,10 +329,16 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     public void hideSystemIconArea(boolean animate) {
         animateHide(mSystemIconArea, animate, true);
+        if (mCustomLogoPos == 2) {
+            animateHide(mCLogoRight, animate, false);
+        }
     }
 
     public void showSystemIconArea(boolean animate) {
         animateShow(mSystemIconArea, animate);
+        if (mCustomLogoPos == 2) {
+            animateShow(mCLogoRight, animate);
+        }
     }
 
     public void hideNotificationIconArea(boolean animate) {
@@ -319,12 +346,17 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         if (((Clock)mLeftClock).isEnabled()) {
             animateHide(mLeftClock, animate, true);
         }
+        if (mCustomLogoPos == 1) {
+            animateHide(mCLogo, animate, false);
+        }
     }
-
     public void showNotificationIconArea(boolean animate) {
         animateShow(mNotificationIconAreaInner, animate);
         if (((Clock)mLeftClock).isEnabled()) {
             animateShow(mLeftClock, animate);
+        }
+        if (mCustomLogoPos == 1) {
+            animateShow(mCLogo, animate);
         }
     }
 
@@ -424,4 +456,138 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             animateHide(mCustomCarrierLabel, animate, false);
         }
     }
+
+    public void updateSettings(boolean animate) {
+    try {
+        mCustomlogoStyle = Settings.System.getInt(
+                getContext().getContentResolver(), Settings.System.CUSTOM_LOGO_STYLE, 0);
+        mCustomLogoPos = Settings.System.getInt(
+                    getContext().getContentResolver(), Settings.System.CUSTOM_LOGO_POSITION, 0);
+
+     } catch (Exception e) {
+     }
+	    updateCustomLogo();
+        setCarrierLabel(animate);
+        if (mNotificationIconAreaInner != null) {
+            if (mCustomLogoPos == 1) {
+                if (mNotificationIconAreaInner.getVisibility() == View.VISIBLE) {
+                    animateShow(mCLogo, animate);
+                }
+            } else if (mCustomLogoPos != 1) {
+                animateHide(mCLogo, animate, false);
+            }
+        }
+        if (mSystemIconArea != null) {
+            if (mCustomLogoPos == 2) {
+                if (mSystemIconArea.getVisibility() == View.VISIBLE) {
+                    animateShow(mCLogoRight, animate);
+                }
+            } else if (mCustomLogoPos != 2) {
+                animateHide(mCLogoRight, animate, false);
+            }
+        }
+    }
+
+    public void updateCustomLogo() {
+        Drawable d = null;
+        int style = mCustomlogoStyle;
+
+        if ( style == 0) {
+            d = getContext().getResources().getDrawable(R.drawable.custom);
+        } else if ( style == 1) {
+            d = getContext().getResources().getDrawable(R.drawable.custom_1);
+        } else if ( style == 2) {
+            d = getContext().getResources().getDrawable(R.drawable.custom_2);
+        } else if ( style == 3) {
+            d = getContext().getResources().getDrawable(R.drawable.custom_3);
+        } else if ( style == 4) {
+            d = getContext().getResources().getDrawable(R.drawable.custom_4);
+        } else if ( style == 5) {
+            d = getContext().getResources().getDrawable(R.drawable.custom_5);
+        } else if ( style == 6) {
+            d = getContext().getResources().getDrawable(R.drawable.custom_6);
+        } else if ( style == 7) {
+            d = getContext().getResources().getDrawable(R.drawable.custom_7);
+        } else if ( style == 8) {
+            d = getContext().getResources().getDrawable(R.drawable.custom_8);
+        } else if ( style == 9) {
+            d = getContext().getResources().getDrawable(R.drawable.custom_9);
+        } else if ( style == 10) {
+            d = getContext().getResources().getDrawable(R.drawable.custom_10);
+        }  else if ( style == 11) {
+            d = getContext().getResources().getDrawable(R.drawable.custom_11);
+        } else if ( style == 12) {
+            d = getContext().getResources().getDrawable(R.drawable.custom_12);
+        } else if ( style == 13) {
+            d = getContext().getResources().getDrawable(R.drawable.custom_13);
+        } else if ( style == 14) {
+            d = getContext().getResources().getDrawable(R.drawable.custom_14);
+        } else if ( style  == 15) {
+            d = getContext().getResources().getDrawable(R.drawable.weather_off);
+        } else if ( style  == 16) {
+            d = getContext().getResources().getDrawable(R.drawable.blender);
+        } else if ( style  == 17) {
+            d = getContext().getResources().getDrawable(R.drawable.cake_variant);
+        } else if ( style  == 18) {
+            d = getContext().getResources().getDrawable(R.drawable.guitar_electric);
+        } else if ( style  == 19) {
+            d = getContext().getResources().getDrawable(R.drawable.tag_faces);
+        } else if ( style  == 20) {
+            d = getContext().getResources().getDrawable(R.drawable.run);
+        } else if ( style  == 21) {
+            d = getContext().getResources().getDrawable(R.drawable.radioactive);
+        } else if ( style  == 22) {
+            d = getContext().getResources().getDrawable(R.drawable.professional_hexagon);
+        } else if ( style  == 23) {
+            d = getContext().getResources().getDrawable(R.drawable.pokeball);
+        } else if ( style  == 24) {
+            d = getContext().getResources().getDrawable(R.drawable.package_variant);
+        } else if ( style  == 25) {
+            d = getContext().getResources().getDrawable(R.drawable.package_variant_closed);
+        } else if ( style  == 26) {
+            d = getContext().getResources().getDrawable(R.drawable.weather_fog);
+        } else if ( style  == 27) {
+            d = getContext().getResources().getDrawable(R.drawable.cat);
+        } else if ( style == 28) {
+            d = getContext().getResources().getDrawable(R.drawable.android1);
+        } else if ( style == 29) {
+            d = getContext().getResources().getDrawable(R.drawable.bike);
+        } else if ( style == 30) {
+            d = getContext().getResources().getDrawable(R.drawable.candycane);
+        } else if ( style == 31) {
+            d = getContext().getResources().getDrawable(R.drawable.shit);
+        } else if ( style == 32) {
+            d = getContext().getResources().getDrawable(R.drawable.chart_bubble);
+        } else if ( style == 33) {
+            d = getContext().getResources().getDrawable(R.drawable.google1);
+        } else if ( style == 34) {
+            d = getContext().getResources().getDrawable(R.drawable.fish);
+        } else if ( style == 35) {
+            d = getContext().getResources().getDrawable(R.drawable.gender_male);
+        } else if ( style == 36) {
+            d = getContext().getResources().getDrawable(R.drawable.gender_female);
+        } else if ( style == 37) {
+            d = getContext().getResources().getDrawable(R.drawable.pb_logo);
+        } else if ( style == 38) {
+            d = getContext().getResources().getDrawable(R.drawable.rr_original_logo_1);
+        } else if ( style == 39) {
+            d = getContext().getResources().getDrawable(R.drawable.rr_logo_half);
+        } else if ( style == 40) {
+            d = getContext().getResources().getDrawable(R.drawable.rr_noring);
+        } else if ( style == 41) {
+            d = getContext().getResources().getDrawable(R.drawable.spider1);
+        } else if ( style == 42) {
+            d = getContext().getResources().getDrawable(R.drawable.spider2);
+        } else if ( style == 43) {
+            d = getContext().getResources().getDrawable(R.drawable.orioles_logo);
+        }
+
+        if (mCustomLogoPos == 1) {
+            mCLogo.setImageDrawable(null);
+            mCLogo.setImageDrawable(d);
+        } else if (mCustomLogoPos == 2) {
+            mCLogoRight.setImageDrawable(null);
+            mCLogoRight.setImageDrawable(d);
+        }
+     }
 }
