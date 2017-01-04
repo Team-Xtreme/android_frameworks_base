@@ -32,7 +32,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
     private final PhoneStatusBarView mView;
     private final float mIconAlphaWhenOpaque;
 
-    private View mLeftSide, mStatusIcons, mSignalCluster, mBattery, mClock, mLeftClock;
+    private View mLeftSide, mStatusIcons, mSignalCluster, mBattery, mClock, mLeftClock, mNetworkTraffic;
 
     private Animator mCurrentAnimation;
 
@@ -50,6 +50,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
         mBattery = mView.findViewById(R.id.battery);
         mClock = mView.findViewById(R.id.clock);
         mLeftClock = mView.findViewById(R.id.left_clock);
+        mNetworkTraffic = mView.findViewById(R.id.networkTraffic);
         applyModeBackground(-1, getMode(), false /*animate*/);
         applyMode(getMode(), false /*animate*/);
     }
@@ -95,7 +96,8 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
                     animateTransitionTo(mSignalCluster, newAlpha),
                     animateTransitionTo(mBattery, newAlphaBC),
                     animateTransitionTo(mClock, newAlphaBC),
-                    animateTransitionTo(mLeftClock, newAlphaBC)
+                    animateTransitionTo(mLeftClock, newAlphaBC),
+                    animateTransitionTo(mNetworkTraffic, newAlpha)
                     );
             if (isLightsOut(mode)) {
                 anims.setDuration(LIGHTS_OUT_DURATION);
@@ -107,6 +109,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
             mStatusIcons.setAlpha(newAlpha);
             mSignalCluster.setAlpha(newAlpha);
             mBattery.setAlpha(newAlphaBC);
+            mNetworkTraffic.setAlpha(newAlpha);
             mClock.setAlpha(newAlphaBC);
             mLeftClock.setAlpha(newAlphaBC);
         }
