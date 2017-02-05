@@ -122,7 +122,6 @@ public class SignalClusterView extends LinearLayout implements NetworkController
     private boolean mBlockMobile;
     private boolean mBlockWifi;
     private boolean mBlockEthernet;
-    private boolean mActivityEnabled;
     private boolean mForceBlockWifi;
     private boolean mBlockVolte;
     private boolean mBlockVpn;
@@ -130,6 +129,14 @@ public class SignalClusterView extends LinearLayout implements NetworkController
     private boolean mNoBattery;
 
     private final IconLogger mIconLogger = Dependency.get(IconLogger.class);
+
+    private boolean mDataActivityEnabled;
+    private boolean mWifiActivityEnabled;
+
+    private static final String DATA_ACTIVITY_ARROWS =
+            "system:" + Settings.System.DATA_ACTIVITY_ARROWS;
+    private static final String WIFI_ACTIVITY_ARROWS =
+            "system:" + Settings.System.WIFI_ACTIVITY_ARROWS;
 
     public SignalClusterView(Context context) {
         this(context, null);
@@ -158,7 +165,6 @@ public class SignalClusterView extends LinearLayout implements NetworkController
         mIconScaleFactor = typedValue.getFloat();
         mNetworkController = Dependency.get(NetworkController.class);
         mSecurityController = Dependency.get(SecurityController.class);
-        updateActivityEnabled();
     }
 
     public void setForceBlockWifi() {
@@ -208,6 +214,21 @@ public class SignalClusterView extends LinearLayout implements NetworkController
             mNoBattery = style == BatteryMeterDrawableBase.BATTERY_STYLE_HIDDEN;
 
             apply();
+                break;
+            case DATA_ACTIVITY_ARROWS:
+                if (newValue == null)
+                    mDataActivityEnabled = updateActivityEnabled();
+                else
+                    mDataActivityEnabled = Integer.parseInt(newValue) != 0;
+                apply();
+                break;
+            case WIFI_ACTIVITY_ARROWS:
+                if (newValue == null)
+                    mWifiActivityEnabled = updateActivityEnabled();
+                else
+                    mWifiActivityEnabled = Integer.parseInt(newValue) != 0;
+                apply();
+                break;
         }
     }
 
@@ -269,7 +290,9 @@ public class SignalClusterView extends LinearLayout implements NetworkController
         int endPadding = mMobileSignalGroup.getChildCount() > 0 ? mMobileSignalGroupEndPadding : 0;
         mMobileSignalGroup.setPaddingRelative(0, 0, endPadding, 0);
 
-        Dependency.get(TunerService.class).addTunable(this, StatusBarIconController.ICON_BLACKLIST, STATUS_BAR_BATTERY_STYLE);
+        Dependency.get(TunerService.class).addTunable(this, StatusBarIconController.ICON_BLACKLIST, STATUS_BAR_BATTERY_STYLE),
+                DATA_ACTIVITY_ARROWS,
+                WIFI_ACTIVITY_ARROWS);
 
         apply();
         applyIconTint();
@@ -309,8 +332,8 @@ public class SignalClusterView extends LinearLayout implements NetworkController
         });
     }
 
-    private void updateActivityEnabled() {
-        mActivityEnabled = mContext.getResources().getBoolean(R.bool.config_showActivity);
+    private boolean updateActivityEnabled() {
+        return mContext.getResources().getBoolean(R.bool.config_showActivity);
     }
 
     @Override
@@ -319,8 +342,8 @@ public class SignalClusterView extends LinearLayout implements NetworkController
         mWifiVisible = statusIcon.visible && !mBlockWifi;
         mWifiStrengthId = statusIcon.icon;
         mWifiDescription = statusIcon.contentDescription;
-        mWifiIn = activityIn && mActivityEnabled && mWifiVisible;
-        mWifiOut = activityOut && mActivityEnabled && mWifiVisible;
+        mWifiIn = activityIn && mWifiActivityEnabled && mWifiVisible;
+        mWifiOut = activityOut && mWifiActivityEnabled && mWifiVisible;
 
         apply();
     }
@@ -341,8 +364,8 @@ public class SignalClusterView extends LinearLayout implements NetworkController
         state.mIsMobileTypeIconWide = statusType != 0 && isWide;
         state.mRoaming = roaming;
         mMobileIms = isMobileIms;
-        state.mActivityIn = activityIn && mActivityEnabled;
-        state.mActivityOut = activityOut && mActivityEnabled;
+        state.mActivityIn = activityIn && mDataActivityEnabled;
+        state.mActivityOut = activityOut && mDataActivityEnabled;
 
         apply();
     }
