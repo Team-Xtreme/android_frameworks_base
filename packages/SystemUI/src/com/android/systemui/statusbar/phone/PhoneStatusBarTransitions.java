@@ -33,7 +33,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
     private final float mIconAlphaWhenOpaque;
 
     private View mLeftSide, mStatusIcons, mSignalCluster, mBattery, mClock, mCenterClock, mNetworkTraffic;
-
+    private View mCrDroidLogo, mCrDroidLogoRight;
     private Animator mCurrentAnimation;
     private View mBatteryBar;
 
@@ -46,12 +46,14 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
 
     public void init() {
         mLeftSide = mView.findViewById(R.id.notification_icon_area);
+        mCrDroidLogo = mView.findViewById(R.id.crdroid_logo);
         mStatusIcons = mView.findViewById(R.id.statusIcons);
         mSignalCluster = mView.findViewById(R.id.signal_cluster);
         mBattery = mView.findViewById(R.id.battery);
         mClock = mView.findViewById(R.id.clock);
         mCenterClock = mView.findViewById(R.id.center_clock);
         mNetworkTraffic = mView.findViewById(R.id.networkTraffic);
+        mCrDroidLogoRight = mView.findViewById(R.id.crdroid_logo_right);
         mBatteryBar = mView.findViewById(R.id.battery_bar);
         applyModeBackground(-1, getMode(), false /*animate*/);
         applyMode(getMode(), false /*animate*/);
@@ -93,9 +95,11 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
         if (animate) {
             AnimatorSet anims = new AnimatorSet();
             anims.playTogether(
+                    animateTransitionTo(mCrDroidLogo, newAlpha),
                     animateTransitionTo(mLeftSide, newAlpha),
                     animateTransitionTo(mStatusIcons, newAlpha),
                     animateTransitionTo(mSignalCluster, newAlpha),
+                    animateTransitionTo(mCrDroidLogoRight, newAlpha),
                     animateTransitionTo(mBatteryBar, newAlphaBC),
                     animateTransitionTo(mBattery, newAlphaBC),
                     animateTransitionTo(mClock, newAlphaBC),
@@ -108,9 +112,11 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
             anims.start();
             mCurrentAnimation = anims;
         } else {
+            mCrDroidLogo.setAlpha(newAlpha);
             mLeftSide.setAlpha(newAlpha);
             mStatusIcons.setAlpha(newAlpha);
             mSignalCluster.setAlpha(newAlpha);
+            mCrDroidLogoRight.setAlpha(newAlpha);
             mBatteryBar.setAlpha(newAlphaBC);
             mBattery.setAlpha(newAlphaBC);
             mNetworkTraffic.setAlpha(newAlpha);
