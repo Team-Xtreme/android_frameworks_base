@@ -396,8 +396,7 @@ public class SwipeHelper implements Gefingerpoken {
                 duration = Math.min(duration,
                         (int) (Math.abs(newPos - getTranslation(animView)) * 1000f / Math
                                 .abs(velocity))
-                );6
-
+                );
             } else {
                 duration = DEFAULT_ESCAPE_ANIMATION_DURATION;
             }
