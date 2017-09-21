@@ -4778,6 +4778,12 @@ public final class Settings {
         public static final String RECENT_PANEL_SCALE_FACTOR = "recent_panel_scale_factor";
 
         /**
+         * Volume dialog timeout
+         * @hide
+         */
+        public static final String VOLUME_DIALOG_TIMEOUT = "volume_dialog_timeout";
+
+        /**
          * User favorite tasks for recent panel.
          * @hide
          */
