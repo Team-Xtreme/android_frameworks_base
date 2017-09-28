@@ -27,4 +27,8 @@
     <color name="screen_pinning_button_text">@android:color/white</color>
     <color name="screen_pinning_bg_circ_color">#40FFFFFF</color>
     <color name="screen_pinning_nav_icon_hightlight_outer_color">@android:color/white</color>
+
+    <color name="system_primary_color">@*android:color/primary_material_light</color>
+    <color name="system_accent_color">@*android:color/material_deep_teal_700</color>
+
 </resources>
