@@ -77,6 +77,11 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private SettingsObserver mSettingsObserver;
     private ContentResolver mContentResolver;
 
+    // Statusbar Weather Image
+    private View mWeatherImageView;
+    private View mWeatherTextView;
+    private int mShowWeather;
+
     private int mTickerEnabled;
     private View mTickerViewFromStub;
 
@@ -143,6 +148,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             getContext().getContentResolver().registerContentObserver(
                     Settings.System.getUriFor(Settings.System.STATUS_BAR_CARRIER),
                     false, this, UserHandle.USER_ALL);
+            mContentResolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -175,6 +183,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
                 getContext().getContentResolver(), Settings.System.STATUS_BAR_CARRIER, 1,
                 UserHandle.USER_CURRENT);
         setCarrierLabel(animate);
+        mShowWeather = Settings.System.getIntForUser(
+                getContext().getContentResolver(), Settings.System.STATUS_BAR_SHOW_WEATHER_TEMP, 0,
+                UserHandle.USER_CURRENT);
     }
 
     @Override
@@ -198,6 +209,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mLeftClock = mStatusBar.findViewById(R.id.left_clock);
         Dependency.get(DarkIconDispatcher.class).addDarkReceiver(mSignalClusterView);
         mCustomCarrierLabel = mStatusBar.findViewById(R.id.statusbar_carrier_text);
+        mWeatherTextView = mStatusBar.findViewById(R.id.weather_temp);
+        mWeatherImageView = mStatusBar.findViewById(R.id.weather_image);
         updateSettings(false);
         // Default to showing until we know otherwise.
         showSystemIconArea(false);
