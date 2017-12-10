@@ -6611,6 +6611,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.AMBIENT_VISUALIZER_ENABLED),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LAST_DOZE_AUTO_BRIGHTNESS),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -6635,6 +6638,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             setQuickStatusBarHeader();
             setFpToDismissNotifications();
             setAmbientVis();
+            updateDozeBrightness();
         }
     }
 
@@ -6768,6 +6772,15 @@ public class StatusBar extends SystemUI implements DemoMode,
             Settings.System.RECENTS_ICON_PACK, mCurrentUserId);
         IconPackHelper.getInstance(mContext).updatePrefs(currentIconPack);
         mRecents.resetIconCache();
+    }
+
+    private void updateDozeBrightness() {
+        int defaultDozeBrightness = mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_screenBrightnessDoze);
+        int lastValue = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.LAST_DOZE_AUTO_BRIGHTNESS, defaultDozeBrightness,
+                UserHandle.USER_CURRENT);
+        mStatusBarWindowManager.updateDozeBrightness(lastValue);
     }
 
     private RemoteViews.OnClickHandler mOnClickHandler = new RemoteViews.OnClickHandler() {
