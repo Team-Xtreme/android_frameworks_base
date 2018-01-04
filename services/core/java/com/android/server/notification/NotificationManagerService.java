@@ -312,6 +312,9 @@ public class NotificationManagerService extends SystemService {
     protected boolean mInCall = false;
     private boolean mNotificationPulseEnabled;
 
+    private int mSoundVibScreenOn;
+    private boolean mIsMediaPlaying;
+
     private Uri mInCallNotificationUri;
     private AudioAttributes mInCallNotificationAudioAttributes;
     private float mInCallNotificationVolume;
@@ -335,7 +338,7 @@ public class NotificationManagerService extends SystemService {
     @GuardedBy("mNotificationLock")
     private HashMap<String, Long> mAnnoyingNotifications = new HashMap<String, Long>();
 
-    private long mAnnoyingNotificationThreshold = -1;
+    private long mAnnoyingNotificationThreshold = 30000; // 30 seconds
 
     private AppOpsManager mAppOps;
     private UsageStatsManagerInternal mAppUsageStats;
@@ -1029,7 +1032,8 @@ public class NotificationManagerService extends SystemService {
                 = Settings.Global.getUriFor(Settings.Global.MAX_NOTIFICATION_ENQUEUE_RATE);
         private final Uri MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD_URI
                 = Settings.System.getUriFor(Settings.System.MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD);
-
+        private final Uri NOTIFICATION_SOUND_VIB_SCREEN_ON
+                = Settings.System.getUriFor(Settings.System.NOTIFICATION_SOUND_VIB_SCREEN_ON);
         SettingsObserver(Handler handler) {
             super(handler);
         }
@@ -1043,6 +1047,8 @@ public class NotificationManagerService extends SystemService {
             resolver.registerContentObserver(NOTIFICATION_RATE_LIMIT_URI,
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD_URI,
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(NOTIFICATION_SOUND_VIB_SCREEN_ON,
                     false, this, UserHandle.USER_ALL);
             update(null);
         }
@@ -1070,8 +1076,12 @@ public class NotificationManagerService extends SystemService {
             }
             if (uri == null || MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD_URI.equals(uri)) {
                 mAnnoyingNotificationThreshold = Settings.System.getLongForUser(resolver,
-                       Settings.System.MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD, 0,
+                       Settings.System.MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD, 30000,
                        UserHandle.USER_CURRENT);
+            }
+            if (uri == null || NOTIFICATION_SOUND_VIB_SCREEN_ON.equals(uri)) {
+                mSoundVibScreenOn = Settings.System.getIntForUser(resolver,
+                            Settings.System.NOTIFICATION_SOUND_VIB_SCREEN_ON, 1, UserHandle.USER_CURRENT);
             }
         }
     }
@@ -3062,6 +3072,11 @@ public class NotificationManagerService extends SystemService {
         public void forcePulseLedLight(int color, int onTime, int offTime) {
             forcePulseLed(color, onTime, offTime);
         }
+
+        @Override
+        public void setMediaPlaying(boolean playing) {
+            mIsMediaPlaying = playing;
+        }
     };
 
     private void applyAdjustment(NotificationRecord r, Adjustment adjustment) {
@@ -4084,8 +4099,12 @@ public class NotificationManagerService extends SystemService {
         }
 
         if (aboveThreshold && isNotificationForCurrentUser(record)) {
-
-            if (mSystemReady && mAudioManager != null && !notificationIsAnnoying(key, pkg)) {
+            boolean notificationIsAnnoying = notificationIsAnnoying(pkg);
+            boolean beNoisy = (!mScreenOn && !notificationIsAnnoying)
+                    // if mScreenOn && mSoundVibScreenOn == 0 never be noisy
+                    || (mScreenOn && mSoundVibScreenOn == 1 && !notificationIsAnnoying)
+                    || (mScreenOn && mSoundVibScreenOn == 2 && !mIsMediaPlaying && !notificationIsAnnoying);
+            if (mSystemReady && mAudioManager != null && beNoisy) {
                 Uri soundUri = record.getSound();
                 hasValidSound = soundUri != null && !Uri.EMPTY.equals(soundUri);
                 long[] vibration = record.getVibration();
