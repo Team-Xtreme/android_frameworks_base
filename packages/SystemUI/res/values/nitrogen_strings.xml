@@ -48,6 +48,9 @@
     <string name="quick_settings_screenshot_label">Screenshot</string>
     <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
 
+    <!-- Battery saver tile -->
+    <string name="battery_saver_qs_tile_fully_charged">Fully Charged</string>
+
     <!-- volte icon switch -->
     <string name="status_bar_volte">VOLTE</string>
 
