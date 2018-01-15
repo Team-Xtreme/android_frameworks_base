@@ -8133,6 +8133,7 @@ public final class Settings {
          * 1 - Light
          * 2 - Dark
          * 3 - Black
+         * 4 - Extended
          * @hide
          */
         public static final String DEVICE_THEME = "device_theme";
