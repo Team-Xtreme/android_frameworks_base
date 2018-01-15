@@ -3270,6 +3270,17 @@ public class StatusBar extends SystemUI implements DemoMode,
         return themeInfo != null && themeInfo.isEnabled();
     }
 
+    public boolean isUsingExtendedTheme() {
+        OverlayInfo themeInfo = null;
+        try {
+            themeInfo = mOverlayManager.getOverlayInfo("com.android.system.theme.extended",
+                    mCurrentUserId);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return themeInfo != null && themeInfo.isEnabled();
+    }
+
     @Nullable
     public View getAmbientIndicationContainer() {
         return mAmbientIndicationContainer;
@@ -5358,6 +5369,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 
         int userThemeSetting = Settings.Secure.getIntForUser(mContext.getContentResolver(),
                 Settings.Secure.DEVICE_THEME, 0, mCurrentUserId);
+        boolean useExtendedTheme = false;
         boolean useBlackTheme = false;
         boolean useDarkTheme = false;
         if (userThemeSetting == 0) {
@@ -5369,6 +5381,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         } else {
             useDarkTheme = userThemeSetting == 2;
             useBlackTheme = userThemeSetting == 3;
+            useExtendedTheme = userThemeSetting == 4;
         }
         if (isUsingDarkTheme() != useDarkTheme) {
             try {
@@ -5390,6 +5403,17 @@ public class StatusBar extends SystemUI implements DemoMode,
                         useBlackTheme, mCurrentUserId);
                 mOverlayManager.setEnabled("com.android.dui.theme.black",
                         useBlackTheme, mCurrentUserId);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Can't change theme", e);
+            }
+        }
+
+        if (isUsingExtendedTheme() != useExtendedTheme) {
+            try {
+                mOverlayManager.setEnabled("com.android.system.theme.extended",
+                        useExtendedTheme, mCurrentUserId);
+                mOverlayManager.setEnabled("com.android.settings.theme.extended",
+                        useExtendedTheme, mCurrentUserId);
             } catch (RemoteException e) {
                 Log.w(TAG, "Can't change theme", e);
             }
