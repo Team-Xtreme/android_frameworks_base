@@ -1499,7 +1499,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 
             RecentsActivity.init(this.mContext);
 
-            updatePreferences();
+            updatePreferences(mContext);
         } catch (Exception e){
             Log.d("mango918", String.valueOf(e));
         }
@@ -6720,16 +6720,10 @@ public class StatusBar extends SystemUI implements DemoMode,
                     Settings.System.BLUR_RADIUS_PREFERENCE_KEY),
                     false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.TRANSLUCENT_QUICK_SETTINGS_PREFERENCE_KEY),
-                    false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_EXPANDED_ENABLED_PREFERENCE_KEY),
                     false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.TRANSLUCENT_NOTIFICATIONS_PREFERENCE_KEY),
-                    false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.TRANSLUCENT_QUICK_SETTINGS_PRECENTAGE_PREFERENCE_KEY),
                     false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.TRANSLUCENT_NOTIFICATIONS_PRECENTAGE_PREFERENCE_KEY),
@@ -6917,18 +6911,15 @@ public class StatusBar extends SystemUI implements DemoMode,
     }
 
     private void updateBlurSettings() {
+            ContentResolver resolver = mContext.getContentResolver();
             mBlurScale = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.BLUR_SCALE_PREFERENCE_KEY, 10);
             mBlurRadius = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.BLUR_RADIUS_PREFERENCE_KEY, 5);
-            mTranslucentQuickSettings =  Settings.System.getIntForUser(resolver,
-                    Settings.System.TRANSLUCENT_QUICK_SETTINGS_PREFERENCE_KEY, 0, UserHandle.USER_CURRENT) == 1;
             mBlurredStatusBarExpandedEnabled = Settings.System.getIntForUser(resolver,
                     Settings.System.STATUS_BAR_EXPANDED_ENABLED_PREFERENCE_KEY, 0, UserHandle.USER_CURRENT) == 1;
             mTranslucentNotifications = Settings.System.getIntForUser(resolver,
                     Settings.System.TRANSLUCENT_NOTIFICATIONS_PREFERENCE_KEY, 0, UserHandle.USER_CURRENT) == 1;
-            mQSTranslucencyPercentage = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.TRANSLUCENT_QUICK_SETTINGS_PRECENTAGE_PREFERENCE_KEY, 60);
             mNotTranslucencyPercentage = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.TRANSLUCENT_NOTIFICATIONS_PRECENTAGE_PREFERENCE_KEY, 70);
            mBlurredRecents = Settings.System.getIntForUser(resolver,
@@ -8798,7 +8789,142 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
     };
 
-    public static void updatePreferences() {
+/*    @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_METHOD)
+    protected void addGestureAnywhereView() {
+        mGestureAnywhereView = (GestureAnywhereView)View.inflate(
+                mContext, R.layout.gesture_anywhere_overlay, null);
+        mWindowManager.addView(mGestureAnywhereView, getGestureAnywhereViewLayoutParams(Gravity.LEFT));
+        mGestureAnywhereView.setStatusBar(this);
+    }
+
+    @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_METHOD)
+    protected void removeGestureAnywhereView() {
+        if (mGestureAnywhereView != null)
+            mWindowManager.removeView(mGestureAnywhereView);
+    }
+
+    @ChaosLab(name="GestureAnywhere", classification=Classification.NEW_METHOD)
+    protected WindowManager.LayoutParams getGestureAnywhereViewLayoutParams(int gravity) {
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.TYPE_STATUS_BAR_SUB_PANEL,
+                0
+                | WindowManager.LayoutParams.FLAG_TOUCHABLE_WHEN_WAKING
+                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+                | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
+                PixelFormat.TRANSLUCENT);
+        lp.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_NO_MOVE_ANIMATION;
+        lp.gravity = Gravity.TOP | gravity;
+        lp.setTitle("GestureAnywhereView");
+
+        return lp;
+    }
+
+   protected void addAppCircleSidebar() {
+        if (mAppCircleSidebar == null) {
+            mAppCircleSidebar = (AppCircleSidebar) View.inflate(mContext, R.layout.app_circle_sidebar, null);
+            mWindowManager.addView(mAppCircleSidebar, getAppCircleSidebarLayoutParams());
+        }
+    }
+
+    protected void removeAppCircleSidebar() {
+         if (mAppCircleSidebar != null) {
+             mWindowManager.removeView(mAppCircleSidebar);
+         }
+     }
+ 
+    protected WindowManager.LayoutParams getAppCircleSidebarLayoutParams() {
+         int maxWidth =
+                 mContext.getResources().getDimensionPixelSize(R.dimen.app_sidebar_trigger_width);
+ 
+         WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
+                 maxWidth,
+                 ViewGroup.LayoutParams.MATCH_PARENT,
+                 WindowManager.LayoutParams.TYPE_STATUS_BAR_SUB_PANEL,
+                 0
+                 | WindowManager.LayoutParams.FLAG_TOUCHABLE_WHEN_WAKING
+                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                 | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                 | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+                 | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
+                 PixelFormat.TRANSLUCENT);
+         lp.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_NO_MOVE_ANIMATION;
+         lp.gravity = Gravity.TOP | Gravity.RIGHT;
+         lp.setTitle("AppCircleSidebar");
+ 
+         return lp;
+    }
+
+
+     public void updatePieControls(boolean reset) {
+         ContentResolver resolver = mContext.getContentResolver();
+ 
+         if (reset) {
+             Settings.Secure.putIntForUser(resolver,
+                     Settings.Secure.PIE_GRAVITY, 0, UserHandle.USER_CURRENT);
+             toggleOrientationListener(false);
+         } else {
+             getOrientationListener();
+             toggleOrientationListener(true);
+         }
+ 
+         if (mPieController == null) {
+             mPieController = PieController.getInstance();
+             mPieController.init(mContext, mWindowManager, this);
+         }
+ 
+         int gravity = Settings.Secure.getInt(resolver,
+                 Settings.Secure.PIE_GRAVITY, 0);
+         mPieController.resetPie(!reset, gravity);
+     }
+ 
+     public void toggleOrientationListener(boolean enable) {
+         if (mOrientationListener == null) {
+             if (!enable) {
+                 // Do nothing if listener has already dropped
+                 return;
+             } else {
+                 boolean shouldEnable = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                         Settings.Secure.PIE_STATE, 0, UserHandle.USER_CURRENT) == 1;
+                 if (shouldEnable) {
+                     // Re-init Orientation listener for later action
+                     getOrientationListener();
+                 } else {
+                     return;
+                 }
+             }
+         }
+ 
+         if (enable && mPowerManager.isScreenOn()) {
+             mOrientationListener.enable();
+         } else {
+             mOrientationListener.disable();
+             // if it has been disabled, then don't leave it to
+             // prevent called from PhoneWindowManager
+             mOrientationListener = null;
+         }
+     }
+
+     private void getOrientationListener() {
+         if (mOrientationListener == null)
+             mOrientationListener = new OrientationEventListener(mContext,
+                     SensorManager.SENSOR_DELAY_NORMAL) {
+                 @Override
+                 public void onOrientationChanged(int orientation) {
+                     int rotation = mDisplay.getRotation();
+                     if (rotation != mOrientation) {
+                         if (mPieController != null) mPieController.detachPie();
+                         mOrientation = rotation;
+                     }
+                 }
+            };
+     }
+*/
+
+    public static void updatePreferences(Context mContext) {
         RecentsActivity.updatePreferences(mContext);
         if (mNotificationData == null)
             return;
