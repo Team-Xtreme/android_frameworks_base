@@ -534,6 +534,9 @@ public class StatusBar extends SystemUI implements DemoMode,
     private Ticker mTicker;
     private boolean mTicking;
 
+    // LS visualizer on Ambient Display
+    private boolean mAmbientVisualizer;
+
     // Tracking finger for opening/closing.
     boolean mTracking;
 
@@ -2726,6 +2729,10 @@ public class StatusBar extends SystemUI implements DemoMode,
         if (keyguardVisible && mKeyguardShowingMedia &&
                 (artworkDrawable instanceof BitmapDrawable)) {
             // always use current backdrop to color eq
+            mVisualizerView.setBitmap(((BitmapDrawable)artworkDrawable).getBitmap());
+        }
+
+        if (mAmbientVisualizer && !mDozing && (artworkDrawable instanceof BitmapDrawable)) {
             mVisualizerView.setBitmap(((BitmapDrawable)artworkDrawable).getBitmap());
         }
 
@@ -5963,11 +5970,13 @@ public class StatusBar extends SystemUI implements DemoMode,
             mScrimController.wakeUpFromAod();
             mDozeScrimController.onScreenTurnedOn();
             mVisualizerView.setVisible(true);
+            
         }
 
         @Override
         public void onScreenTurnedOff() {
             mFalsingManager.onScreenOff();
+            //BOOTALERT
             mVisualizerView.setVisible(false);
             // If we pulse in from AOD, we turn the screen off first. However, updatingIsKeyguard
             // in that case destroys the HeadsUpManager state, so don't do it in that case.
@@ -6127,6 +6136,10 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
         mStatusBarWindowManager.setDozing(mDozing);
         mStatusBarKeyguardViewManager.setDozing(mDozing);
+        //BOOTALERT
+        if (mAmbientVisualizer && mDozing) {
+            mVisualizerView.setVisible(true);
+        }
         if (mAmbientMediaPlaying != 0 && mAmbientIndicationContainer instanceof DozeReceiver) {
             ((DozeReceiver) mAmbientIndicationContainer).setDozing(mDozing);
         }
@@ -6588,6 +6601,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.FP_SWIPE_TO_DISMISS_NOTIFICATIONS),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.AMBIENT_VISUALIZER_ENABLED),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -6610,6 +6626,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             updateRecentsIconPack();
             setQuickStatusBarHeader();
             setFpToDismissNotifications();
+            setAmbientVis();
         }
     }
 
@@ -6698,6 +6715,12 @@ public class StatusBar extends SystemUI implements DemoMode,
     private void setFpToDismissNotifications() {
         mFpDismissNotifications = Settings.Secure.getIntForUser(mContext.getContentResolver(),
                 Settings.Secure.FP_SWIPE_TO_DISMISS_NOTIFICATIONS, 0,
+                UserHandle.USER_CURRENT) == 1;
+    }
+
+    private void setAmbientVis() {
+        mAmbientVisualizer = Settings.System.getIntForUser(
+                mContext.getContentResolver(), Settings.System.AMBIENT_VISUALIZER_ENABLED, 0,
                 UserHandle.USER_CURRENT) == 1;
     }
 
