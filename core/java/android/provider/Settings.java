@@ -4387,6 +4387,34 @@ public final class Settings {
         public static final String POWERMENU_SCREENRECORD = "powermenu_screenrecord";
 
         /**
+         * Whether to display the power menu advanced reboot option on a secured lockscreen
+         *
+         * @hide
+         */
+        public static final String POWERMENU_LS_ADVANCED_REBOOT = "powermenu_ls_advanced_reboot";
+
+        /**
+         * Whether to display the power menu screenshot option on a secured lockscreen
+         *
+         * @hide
+         */
+        public static final String POWERMENU_LS_SCREENSHOT = "powermenu_ls_screenshot";
+
+        /**
+         * Whether to display the power menu airplane mode option on a secured lockscreen
+         *
+         * @hide
+         */
+        public static final String POWERMENU_LS_AIRPLANE = "powermenu_ls_airplane";
+
+        /**
+         * Whether to display the power menu reboot option on a secured lockscreen
+         *
+         * @hide
+         */
+        public static final String POWERMENU_LS_REBOOT = "powermenu_ls_reboot";
+
+        /**
          * Boolean value whether to link ringtone and notification volume
          *
          * @hide
