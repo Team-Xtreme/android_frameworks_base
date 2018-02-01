@@ -101,6 +101,7 @@ public class NfcTile extends QSTileImpl<BooleanState> {
         if (state.slash == null) {
             state.slash = new SlashState();
         }
+        if (getAdapter() == null) return;
         state.icon = mIcon;
         if (getAdapter() == null) return;
         state.value = getAdapter().isEnabled();
