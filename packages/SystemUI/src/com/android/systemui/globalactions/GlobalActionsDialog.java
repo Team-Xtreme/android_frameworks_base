@@ -657,7 +657,9 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
 
         @Override
         public boolean showDuringKeyguard() {
-            return true;
+                boolean showlocked = Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.POWERMENU_LS_SCREENSHOT, 0) == 1;
+                return showlocked;
         }
 
         @Override
@@ -681,7 +683,7 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
 
             public boolean showDuringKeyguard() {
                 boolean showlocked = Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.POWERMENU_LS_SCREENSHOT, 0) == 1;
+                        Settings.System.POWERMENU_LS_SCREENRECORD, 0) == 1;
                 return showlocked;
             }
 
@@ -713,7 +715,9 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
             }
 
             public boolean showDuringKeyguard() {
-                return true;
+                boolean showlocked = Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.POWERMENU_LS_TORCH, 0) == 1;
+                return showlocked;
             }
 
             public boolean showBeforeProvisioning() {
@@ -801,7 +805,7 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
 
             @Override
             public boolean showDuringKeyguard() {
-                return true;
+                return false;
             }
 
             @Override
@@ -891,7 +895,7 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
 
             @Override
             public boolean showDuringKeyguard() {
-                return true;
+                return false;
             }
 
             @Override
@@ -938,7 +942,9 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
                         }
 
                         public boolean showDuringKeyguard() {
-                            return true;
+                        boolean showlocked = Settings.System.getInt(mContext.getContentResolver(),
+                                Settings.System.POWERMENU_LS_USERS, 0) == 1;
+                        return showlocked;
                         }
 
                         public boolean showBeforeProvisioning() {
