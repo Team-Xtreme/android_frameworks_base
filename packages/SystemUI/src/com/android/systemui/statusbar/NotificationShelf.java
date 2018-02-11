@@ -33,6 +33,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.android.systemui.Interpolators;
 import com.android.systemui.R;
 import com.android.systemui.ViewInvertHelper;
+import com.android.systemui.doze.DozeLog;
 import com.android.systemui.statusbar.notification.NotificationUtils;
 import com.android.systemui.statusbar.phone.NotificationIconContainer;
 import com.android.systemui.statusbar.phone.NotificationPanelView;
@@ -164,14 +165,14 @@ public class NotificationShelf extends ActivatableNotificationView implements
         updateIconVisibility();
     }
 
-    public void setCleanLayout(boolean force) {
-        mForcedMediaDoze = force;
+    public void setCleanLayout(int reason) {
+        mForcedMediaDoze =
+                reason == DozeLog.PULSE_REASON_FORCED_MEDIA_NOTIFICATION;
         updateIconVisibility();
     }
 
     public void updateIconVisibility() {
-        mShelfIcons.setVisibility(!mShowNotificationShelf || mForcedMediaDoze ?
-                                    View.GONE : View.VISIBLE);
+        mShelfIcons.setVisibility(mForcedMediaDoze ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override

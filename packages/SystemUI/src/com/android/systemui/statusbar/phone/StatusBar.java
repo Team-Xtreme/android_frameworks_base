@@ -564,7 +564,6 @@ public class StatusBar extends SystemUI implements DemoMode,
     private DUPackageMonitor mPackageMonitor;
 
     private int mAmbientMediaPlaying;
-    private boolean isMediaPlaying;
 
     // XXX: gesture research
     private final GestureRecorder mGestureRec = DEBUG_GESTURES
@@ -702,14 +701,6 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
     };
 
-    private void setCleanLayout(boolean force) {
-        mNotificationPanel.setCleanLayout(force);
-        mNotificationShelf.setCleanLayout(force);
-        if (mAmbientMediaPlaying != 0 && mAmbientIndicationContainer != null) {
-            ((AmbientIndicationContainer)mAmbientIndicationContainer).setCleanLayout(force);
-        }
-    }
-
     public void setMediaPlaying() {
         if (PlaybackState.STATE_PLAYING ==
                 getMediaControllerPlaybackState(mMediaController)
@@ -727,11 +718,9 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mNavigationBar.setMediaPlaying(true);
             }
         } else {
-            isMediaPlaying = false;
             if (isAmbientContainerAvailable()) {
                 ((AmbientIndicationContainer)mAmbientIndicationContainer).hideIndication();
             }
-            setCleanLayout(false);
             if (mNavigationBar != null) {
                 mNavigationBar.setMediaPlaying(false);
             }
@@ -748,11 +737,9 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (mTickerEnabled == 2) {
                     tick(entry.notification, true, true, mMediaMetadata);
                 }
-                setCleanLayout(mAmbientMediaPlaying == 3 ? true : false);
                 if (isAmbientContainerAvailable()) {
                     ((AmbientIndicationContainer)mAmbientIndicationContainer).setIndication(mMediaMetadata);
                 }
-                isMediaPlaying = true;
                 // NotificationInflater calls async MediaNotificationProcessoron to create notification
                 // colors and when finished will trigger AsyncInflationFinished for all registered callbacks
                 // like StatusBar. From there we'll send updated colors to Pulse
@@ -6256,6 +6243,7 @@ public class StatusBar extends SystemUI implements DemoMode,
                         // Otherwise just show the always-on screen.
                         setPulsing(pulsingEntries);
                     }
+                    setCleanLayout(mAmbientMediaPlaying == 3 ? reason : -1);
                     if (isAmbientContainerAvailable()) {
                         ((AmbientIndicationContainer)mAmbientIndicationContainer).setTickerMarquee(true);
                     }
@@ -6265,25 +6253,24 @@ public class StatusBar extends SystemUI implements DemoMode,
                 public void onPulseFinished() {
                     callback.onPulseFinished();
                     setPulsing(null);
+                    setCleanLayout(-1);
                     if (isAmbientContainerAvailable()) {
                         ((AmbientIndicationContainer)mAmbientIndicationContainer).setTickerMarquee(false);
                     }
                 }
 
                 private void setPulsing(Collection<HeadsUpManager.HeadsUpEntry> pulsing) {
-                    if (pulsing != null && isMediaPlaying && mAmbientMediaPlaying == 3 &&
-                            mAmbientIndicationContainer != null) {
-                        ((AmbientIndicationContainer)mAmbientIndicationContainer).hideIndication();
-                        setCleanLayout(false);
-                    }
                     mStackScroller.setPulsing(pulsing);
                     mNotificationPanel.setPulsing(pulsing != null);
                     mVisualStabilityManager.setPulsing(pulsing != null);
                     mIgnoreTouchWhilePulsing = false;
-                    if (pulsing == null && isMediaPlaying && mAmbientMediaPlaying == 3 &&
-                            mAmbientIndicationContainer != null) {
-                        setCleanLayout(true);
-                        ((AmbientIndicationContainer)mAmbientIndicationContainer).showIndication(mMediaMetadata);
+                }
+
+                private void setCleanLayout(int reason) {
+                    mNotificationPanel.setCleanLayout(reason);
+                    mNotificationShelf.setCleanLayout(reason);
+                    if (isAmbientContainerAvailable()) {
+                        ((AmbientIndicationContainer)mAmbientIndicationContainer).setCleanLayout(reason);
                     }
                 }
             }, reason);

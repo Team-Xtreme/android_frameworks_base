@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.android.systemui.R;
 import com.android.systemui.ambientmusic.AmbientIndicationInflateListener;
 import com.android.systemui.AutoReinflateContainer;
+import com.android.systemui.doze.DozeLog;
 import com.android.systemui.doze.DozeReceiver;
 import com.android.systemui.statusbar.phone.StatusBar;
 
@@ -41,7 +42,7 @@ public class AmbientIndicationContainer extends AutoReinflateContainer implement
     }
 
     public void hideIndication() {
-        showIndication(null);
+        setIndication(null);
     }
 
     public void initializeView(StatusBar statusBar, Handler handler) {
@@ -84,8 +85,9 @@ public class AmbientIndicationContainer extends AutoReinflateContainer implement
         }
     }
 
-    public void setCleanLayout(boolean force) {
-        mForcedMediaDoze = force;
+    public void setCleanLayout(int reason) {
+        mForcedMediaDoze =
+                reason == DozeLog.PULSE_REASON_FORCED_MEDIA_NOTIFICATION;
         updatePosition();
     }
 
@@ -95,7 +97,7 @@ public class AmbientIndicationContainer extends AutoReinflateContainer implement
         this.setLayoutParams(lp);
     }
 
-    public void showIndication(MediaMetadata mediaMetaData) {
+    public void setIndication(MediaMetadata mediaMetaData) {
         CharSequence charSequence = null;
         CharSequence lenghtInfo = null;
         if (mediaMetaData != null) {
@@ -130,10 +132,6 @@ public class AmbientIndicationContainer extends AutoReinflateContainer implement
         } else {
             mAmbientIndication.setVisibility(View.VISIBLE);
         }
-    }
-
-    public void setIndication(MediaMetadata mediaMetaData) {
-        showIndication(mediaMetaData);
         if (mStatusBar != null) {
             mStatusBar.triggerAmbientForMedia();
         }
