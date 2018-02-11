@@ -4099,7 +4099,7 @@ public class NotificationManagerService extends SystemService {
         }
 
         if (aboveThreshold && isNotificationForCurrentUser(record)) {
-            boolean notificationIsAnnoying = notificationIsAnnoying(pkg);
+            boolean notificationIsAnnoying = notificationIsAnnoying(key, pkg);
             boolean beNoisy = (!mScreenOn && !notificationIsAnnoying)
                     // if mScreenOn && mSoundVibScreenOn == 0 never be noisy
                     || (mScreenOn && mSoundVibScreenOn == 1 && !notificationIsAnnoying)
