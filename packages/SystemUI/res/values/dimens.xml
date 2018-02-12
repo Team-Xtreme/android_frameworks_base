@@ -859,4 +859,10 @@
     <!-- Home button padding for sizing -->
     <dimen name="home_padding">15dp</dimen>
 
+    <!-- OmniStyle -->
+    <dimen name="qs_panel_margin_top">25dp</dimen>
+    <dimen name="qs_panel_top_margin">40dp</dimen>
+    <dimen name="qs_panel_margin_top_header">85dp</dimen>
+    <dimen name="qs_panel_footer_height">40dp</dimen>
+
 </resources>

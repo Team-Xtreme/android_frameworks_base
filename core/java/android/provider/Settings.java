@@ -4887,13 +4887,6 @@ public final class Settings {
         public static final String AMBIENT_VISUALIZER_ENABLED = "ambient_visualizer";
 
         /**
-         * Indicates whether ANBI (Accidental navigation button interaction) is enabled.
-         *
-         * @hide
-         */
-        public static final String ANBI_ENABLED = "anbi_enabled";
-
-        /**
          * Statusbar crDroid logo
          * @hide
          */
