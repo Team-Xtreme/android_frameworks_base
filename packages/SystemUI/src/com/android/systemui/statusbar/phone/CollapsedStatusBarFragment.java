@@ -274,11 +274,11 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     public void hideSystemIconArea(boolean animate) {
         animateHide(mSystemIconArea, animate, true);
         animateHide(mCenterClockLayout, animate, true);
-        animateHide(mBatteryBar, animate);
-        animateHide(mCustomIconArea, animate);
-        animateHide(mCrDroidLogoRight, animate);
-        animateHide(mWeatherRight, animate);
-        animateHide(mWeatherImageRight, animate);
+        animateHide(mBatteryBar, animate, true);
+        animateHide(mCustomIconArea, animate, true);
+        animateHide(mCrDroidLogoRight, animate, true);
+        animateHide(mWeatherRight, animate, true);
+        animateHide(mWeatherImageRight, animate, true);
     }
 
     public void showSystemIconArea(boolean animate) {
