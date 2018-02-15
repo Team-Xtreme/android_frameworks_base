@@ -112,7 +112,7 @@
 
     <!-- Tiles native to System UI. Order should match "quick_settings_tiles_default" -->
     <string name="quick_settings_tiles_stock" translatable="false">
-        wifi,cell,battery,dnd,flashlight,rotation,bt,airplane,nfc,location,hotspot,inversion,saver,work,cast,night,lte,caffeine,reboot,pip,screenshot,adb_network,sound,heads_up,screenrecord,hwkeys,volume,usb_tether
+        wifi,cell,battery,dnd,flashlight,rotation,bt,airplane,nfc,location,hotspot,inversion,saver,work,cast,night,lte,caffeine,reboot,pip,screenshot,adb_network,sound,heads_up,screenrecord,hwkeys,volume,usb_tether,expanded_desktop,music,soundsearch
     </string>
 
     <!-- The tiles to display in QuickSettings -->
@@ -432,4 +432,9 @@
         <item>60</item>
         <item>120</item>
     </integer-array>
+
+    <!-- On-The-Go -->
+    <integer name="quick_settings_onthego_dialog_short_timeout">3000</integer>
+    <integer name="quick_settings_onthego_dialog_long_timeout">6000</integer>
+
 </resources>

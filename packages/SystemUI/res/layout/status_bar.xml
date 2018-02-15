@@ -59,6 +59,15 @@
             android:gravity="center"
             android:visibility="gone" />
 
+        <com.android.systemui.nitrogen.carrierlabel.CarrierLabel
+            android:id="@+id/statusbar_carrier_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textAppearance="@style/TextAppearance.StatusBar.CarrierLabel"
+            android:visibility="gone"
+            android:singleLine="true"/>
+
         <!-- The alpha of this area is controlled from both PhoneStatusBarTransitions and
              PhoneStatusBar (DISABLE_NOTIFICATION_ICONS). -->
         <com.android.systemui.statusbar.AlphaOptimizedFrameLayout
@@ -78,8 +87,6 @@
                 android:id="@+id/networkTraffic"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginStart="2dp"
-                android:layout_marginEnd="2dp"
                 android:singleLine="false"
                 android:fontFamily="sans-serif-condensed"
                 android:gravity="right|center_vertical"/>
@@ -104,6 +111,14 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout="@layout/emergency_cryptkeeper_text"
+    />
+
+    <ViewStub
+        android:id="@+id/ticker_stub"
+        android:inflatedId="@+id/ticker"
+        android:layout="@layout/status_bar_ticker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
     />
 
 </com.android.systemui.statusbar.phone.PhoneStatusBarView>

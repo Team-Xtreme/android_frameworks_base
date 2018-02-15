@@ -27,7 +27,11 @@
     <string name="accessibility_quick_settings_caffeine_off">Caffeine off</string>
     <string name="accessibility_quick_settings_caffeine_on">Caffeine on</string>
 
-    <string name="global_action_restart_advanced">Advanced reboot</string>
+    <string name="global_action_restart_advanced">Advanced Reboot</string>
+    <string name="global_action_restart_recovery">Recovery</string>
+    <string name="global_action_restart_bootloader">Bootloader</string>
+    <string name="global_action_restart_ui">SystemUI</string>
+    <string name="global_action_restart_soft">Soft Reboot</string>
     <string name="global_action_screenrecord">Screenrecord</string>
 
     <!-- Reboot/Recovery QS Tile -->
@@ -44,8 +48,11 @@
     <string name="quick_settings_screenshot_label">Screenshot</string>
     <string name="quick_settings_region_screenshot_label">Partial screenshot</string>
 
-    <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
-    <string name="accessibility_data_connection_HP">HSPA+</string>
+    <!-- Screenshot Delete Toast -->
+    <string name="delete_screenshot_toast">Screenshot deleted</string>
+
+    <!-- Battery saver tile -->
+    <string name="battery_saver_qs_tile_fully_charged">Fully Charged</string>
 
     <!-- volte icon switch -->
     <string name="status_bar_volte">VOLTE</string>
@@ -123,4 +130,35 @@
     <!-- Caffeine tile -->
     <string name="caffeine_info_title">What is this?</string>
     <string name="caffeine_info_message">Caffeine tile is a simple tile that you could switch on to keep your screen on.\n\nPlease note that the tile\'s state will reset itself after turning the screen off.</string>
+
+    <!-- Expanded desktop QS Tile -->
+    <string name="quick_settings_expanded_desktop_label">Expanded desktop</string>
+    <string name="quick_settings_expanded_desktop">Expanded</string>
+    <string name="quick_settings_expanded_desktop_off">Normal</string>
+    <string name="quick_settings_expanded_navigation_off">Hide navbar</string>
+    <string name="quick_settings_expanded_statusbar_off">Hide statusbar</string>
+
+    <!-- Music tile -->
+    <string name="quick_settings_music_label">Music</string>
+    <string name="quick_settings_music_play">Play</string>
+    <string name="quick_settings_music_pause">Pause</string>
+
+    <string name="accessibility_data_connection_hspap">HSPA+</string>
+
+    <!-- On The Go -->
+    <string name="onthego_notif_ticker">On-The-Go activated</string>
+    <string name="onthego_notif_title">On-The-Go is active</string>
+    <string name="onthego_notif_stop">Stop</string>
+    <string name="onthego_notif_options">Options</string>
+    <string name="onthego_notif_error">Unable to start On-The-Go</string>
+    <string name="onthego_notif_restart">Restart On-The-Go</string>
+    <string name="onthego_notif_camera_changed">Camera mode changed</string>
+    <string name="onthego_transparency">Transparency</string>
+    <string name="onthego_front_camera">Use front camera</string>
+    <string name="onthego_service_toggle">Automatically restart service</string>
+
+    <!-- accessibility label for button to open running apps prefscreen [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_running_services">Open Running Services screen.</string>
+
+    <string name="quick_settings_sound_search">Sound search</string>
 </resources>

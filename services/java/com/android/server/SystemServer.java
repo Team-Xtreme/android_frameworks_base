@@ -108,6 +108,7 @@ import com.android.server.security.KeyChainSystemService;
 import com.android.server.soundtrigger.SoundTriggerService;
 import com.android.server.statusbar.StatusBarManagerService;
 import com.android.server.storage.DeviceStorageMonitorService;
+import com.android.server.substratum.SubstratumService;
 import com.android.server.telecom.TelecomLoaderService;
 import com.android.server.trust.TrustManagerService;
 import com.android.server.tv.TvInputManagerService;
@@ -646,6 +647,11 @@ public final class SystemServer {
         // Manages Overlay packages
         traceBeginAndSlog("StartOverlayManagerService");
         mSystemServiceManager.startService(new OverlayManagerService(mSystemContext, installer));
+
+        // Substratum system server implementation
+        traceBeginAndSlog("StartSubstratumService");
+        mSystemServiceManager.startService(new SubstratumService(mSystemContext));
+
         traceEnd();
 
         // The sensor service needs access to package manager service, app ops
@@ -1083,35 +1089,38 @@ public final class SystemServer {
                 }
                 traceEnd();
 
-                // Wifi Service must be started first for wifi-related services.
-                traceBeginAndSlog("StartWifi");
-                mSystemServiceManager.startService(WIFI_SERVICE_CLASS);
-                traceEnd();
-                traceBeginAndSlog("StartWifiScanning");
-                mSystemServiceManager.startService(
-                        "com.android.server.wifi.scanner.WifiScanningService");
-                traceEnd();
-
-                if (!disableRtt) {
-                    traceBeginAndSlog("StartWifiRtt");
-                    mSystemServiceManager.startService("com.android.server.wifi.RttService");
-                    traceEnd();
-                }
-
                 if (context.getPackageManager().hasSystemFeature(
-                        PackageManager.FEATURE_WIFI_AWARE)) {
-                    traceBeginAndSlog("StartWifiAware");
-                    mSystemServiceManager.startService(WIFI_AWARE_SERVICE_CLASS);
+                        PackageManager.FEATURE_WIFI)) {
+                    // Wifi Service must be started first for wifi-related services.
+                    traceBeginAndSlog("StartWifi");
+                    mSystemServiceManager.startService(WIFI_SERVICE_CLASS);
                     traceEnd();
-                } else {
-                    Slog.i(TAG, "No Wi-Fi Aware Service (Aware support Not Present)");
-                }
+                    traceBeginAndSlog("StartWifiScanning");
+                    mSystemServiceManager.startService(
+                            "com.android.server.wifi.scanner.WifiScanningService");
+                    traceEnd();
 
-                if (context.getPackageManager().hasSystemFeature(
-                        PackageManager.FEATURE_WIFI_DIRECT)) {
-                    traceBeginAndSlog("StartWifiP2P");
-                    mSystemServiceManager.startService(WIFI_P2P_SERVICE_CLASS);
-                    traceEnd();
+                    if (!disableRtt) {
+                        traceBeginAndSlog("StartWifiRtt");
+                        mSystemServiceManager.startService("com.android.server.wifi.RttService");
+                        traceEnd();
+                    }
+
+                    if (context.getPackageManager().hasSystemFeature(
+                            PackageManager.FEATURE_WIFI_AWARE)) {
+                        traceBeginAndSlog("StartWifiAware");
+                        mSystemServiceManager.startService(WIFI_AWARE_SERVICE_CLASS);
+                        traceEnd();
+                    } else {
+                        Slog.i(TAG, "No Wi-Fi Aware Service (Aware support Not Present)");
+                    }
+
+                    if (context.getPackageManager().hasSystemFeature(
+                            PackageManager.FEATURE_WIFI_DIRECT)) {
+                        traceBeginAndSlog("StartWifiP2P");
+                        mSystemServiceManager.startService(WIFI_P2P_SERVICE_CLASS);
+                        traceEnd();
+                    }
                 }
 
                 if (context.getPackageManager().hasSystemFeature(
@@ -1631,6 +1640,12 @@ public final class SystemServer {
 
         if (safeMode) {
             mActivityManagerService.showSafeModeOverlay();
+        }
+
+        // Let's check whether we should disable all theme overlays
+        final boolean disableOverlays = wm.detectDisableOverlays();
+        if (disableOverlays) {
+            mActivityManagerService.disableOverlays();
         }
 
         // Update the configuration for this context by hand, because we're going

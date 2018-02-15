@@ -50,11 +50,11 @@ public class SwipeHelper implements Gefingerpoken {
     public static final int X = 0;
     public static final int Y = 1;
 
-    private static final float SWIPE_ESCAPE_VELOCITY = 500f; // dp/sec
-    private static final int DEFAULT_ESCAPE_ANIMATION_DURATION = 200; // ms
-    private static final int MAX_ESCAPE_ANIMATION_DURATION = 400; // ms
+    private static final float SWIPE_ESCAPE_VELOCITY = 320f; // dp/sec
+    private static final int DEFAULT_ESCAPE_ANIMATION_DURATION = 180; // ms
+    private static final int MAX_ESCAPE_ANIMATION_DURATION = 320; // ms
     private static final int MAX_DISMISS_VELOCITY = 4000; // dp/sec
-    private static final int SNAP_ANIM_LEN = SLOW_ANIMATIONS ? 1000 : 150; // ms
+    private static final int SNAP_ANIM_LEN = SLOW_ANIMATIONS ? 800 : 140; // ms
 
     static final float SWIPE_PROGRESS_FADE_END = 0.5f; // fraction of thumbnail width
                                               // beyond which swipe progress->0
@@ -357,7 +357,7 @@ public class SwipeHelper implements Gefingerpoken {
      */
     public void dismissChild(final View view, float velocity, boolean useAccelerateInterpolator) {
         dismissChild(view, velocity, null /* endAction */, 0 /* delay */,
-                useAccelerateInterpolator, 0 /* fixedDuration */, false /* isDismissAll */);
+                useAccelerateInterpolator, 0 /* fixedDuration */, false /* isDismissAll */, false);
     }
 
     /**
@@ -370,7 +370,7 @@ public class SwipeHelper implements Gefingerpoken {
      */
     public void dismissChild(final View animView, float velocity, final Runnable endAction,
             long delay, boolean useAccelerateInterpolator, long fixedDuration,
-            boolean isDismissAll) {
+            boolean isDismissAll, boolean forceToLeft) {
         final boolean canBeDismissed = mCallback.canChildBeDismissed(animView);
         float newPos;
         boolean isLayoutRtl = animView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
@@ -381,8 +381,9 @@ public class SwipeHelper implements Gefingerpoken {
         // if the language is rtl we prefer swiping to the left
         boolean animateLeftForRtl = velocity == 0 && (getTranslation(animView) == 0 || isDismissAll)
                 && isLayoutRtl;
-        boolean animateLeft = (Math.abs(velocity) > getEscapeVelocity() && velocity < 0) ||
-                (getTranslation(animView) < 0 && !isDismissAll);
+        boolean animateLeft = (isDismissAll && forceToLeft)
+                || (Math.abs(velocity) > getEscapeVelocity() && velocity < 0)
+                || (getTranslation(animView) < 0 && !isDismissAll);
         if (animateLeft || animateLeftForRtl || animateUpForMenu) {
             newPos = -getSize(animView);
         } else {

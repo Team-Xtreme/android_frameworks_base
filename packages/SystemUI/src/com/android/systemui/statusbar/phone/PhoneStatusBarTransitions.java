@@ -32,7 +32,7 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
     private final PhoneStatusBarView mView;
     private final float mIconAlphaWhenOpaque;
 
-    private View mLeftSide, mStatusIcons, mSignalCluster, mBattery, mClock, mNetworkTraffic, mLeftClock;
+    private View mLeftSide, mStatusIcons, mSignalCluster, mBattery, mClock, mLeftClock, mNetworkTraffic;
 
     private Animator mCurrentAnimation;
 
@@ -95,9 +95,9 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
                     animateTransitionTo(mStatusIcons, newAlpha),
                     animateTransitionTo(mSignalCluster, newAlpha),
                     animateTransitionTo(mBattery, newAlphaBC),
-                    animateTransitionTo(mNetworkTraffic, newAlpha),
                     animateTransitionTo(mClock, newAlphaBC),
-                    animateTransitionTo(mLeftClock, newAlphaBC)
+                    animateTransitionTo(mLeftClock, newAlphaBC),
+                    animateTransitionTo(mNetworkTraffic, newAlpha)
                     );
             if (isLightsOut(mode)) {
                 anims.setDuration(LIGHTS_OUT_DURATION);
