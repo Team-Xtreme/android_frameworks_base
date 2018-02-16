@@ -40,7 +40,7 @@
 
     <LinearLayout android:id="@+id/system_icons_super_container"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/status_bar_header_height"
+        android:layout_height="@dimen/status_bar_header_height_keyguard"
         android:layout_toStartOf="@id/multi_user_switch"
         android:layout_alignWithParentIfMissing="true"
         android:layout_marginStart="@dimen/system_icons_super_container_margin_start"
@@ -54,7 +54,7 @@
         </FrameLayout>
     </LinearLayout>
 
-    <com.android.keyguard.CarrierText
+    <com.android.systemui.nitrogen.carrierlabel.CarrierLabel
         android:id="@+id/keyguard_carrier_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -62,8 +62,7 @@
         android:layout_toStartOf="@id/system_icons_super_container"
         android:gravity="center_vertical"
         android:ellipsize="marquee"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="?attr/wallpaperTextColorSecondary"
+        android:textAppearance="@style/TextAppearance.StatusBar.CarrierLabel"
         android:singleLine="true" />
 
 </com.android.systemui.statusbar.phone.KeyguardStatusBarView>

@@ -158,14 +158,14 @@ class TelephonyIcons {
             0,
             0,
             AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
-            R.string.accessibility_data_connection_3_5g,
+            R.string.accessibility_data_connection_hspa,
             TelephonyIcons.ICON_H,
             false,
             TelephonyIcons.QS_DATA_H
             );
 
     static final MobileIconGroup HP = new MobileIconGroup(
-            "H",
+            "HP",
             null,
             null,
             AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
@@ -173,11 +173,10 @@ class TelephonyIcons {
             0,
             0,
             AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
-            R.string.accessibility_data_connection_HP,
+            R.string.accessibility_data_connection_hspap,
             TelephonyIcons.ICON_HP,
             false,
             TelephonyIcons.QS_DATA_HP
-
             );
 
     static final MobileIconGroup FOUR_G = new MobileIconGroup(
