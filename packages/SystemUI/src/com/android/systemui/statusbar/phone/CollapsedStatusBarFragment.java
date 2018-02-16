@@ -73,8 +73,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     private View mClock;
     private View mLeftClock;
-    private SettingsObserver mSettingsObserver;
-    private ContentResolver mContentResolver;
     private int mTickerEnabled;
     private TickerObserver mTickerObserver;
     private ContentResolver mContentResolver;
@@ -192,8 +190,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         showSystemIconArea(false);
         initEmergencyCryptkeeperText();
 
-        mSettingsObserver.observe();
-        mSettingsObserver.update();
         mTickerObserver.observe();
         mTickerObserver.update();
 
@@ -305,7 +301,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     public void hideNotificationIconArea(boolean animate) {
         animateHide(mNotificationIconAreaInner, animate, true);
         if (((Clock)mLeftClock).isEnabled()) {
-            animateHide(mLeftClock, animate);
+            animateHide(mLeftClock, animate, true);
         }
     }
 

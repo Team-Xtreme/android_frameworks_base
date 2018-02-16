@@ -486,8 +486,6 @@ public class StatusBar extends SystemUI implements DemoMode,
     // settings
     private QSPanel mQSPanel;
     private int mBatterySaverWarningColor;
-    private QuickStatusBarHeader mQuickStatusBarHeader;
-
     private boolean mAutomaticBrightness;
     private boolean mBrightnessControl;
     private boolean mBrightnessChanged;
