@@ -860,7 +860,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mVolumeMusicControlActive;
     private boolean mVolumeMusicControl;
     private boolean mVolumeWakeActive;
-    private HardkeyActionHandler mKeyHandler;
+    private HardkeyActionHandler mHardKeyHandler;
 
     private int mTorchActionMode;
 
@@ -2187,7 +2187,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // only for hwkey devices
         if (!mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_showNavigationBar)) {
-            mKeyHandler = new HardkeyActionHandler(mContext, mHandler);
+            mHardKeyHandler = new HardkeyActionHandler(mContext, mHandler);
         }
 
         mSettingsObserver = new SettingsObserver(mHandler);
@@ -3786,8 +3786,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // dispatch
         // if keyguard is showing and secure, don't intercept and let aosp keycode
         // implementation handle event
-        if (mKeyHandler != null && !keyguardOn && !virtualKey) {
-            boolean handled = mKeyHandler.handleKeyEvent(win, keyCode, repeatCount, down, canceled,
+        if (mHardKeyHandler != null && !keyguardOn && !virtualKey) {
+            boolean handled = mHardKeyHandler.handleKeyEvent(win, keyCode, repeatCount, down, canceled,
                     longPress, keyguardOn);
             if (handled)
                 return -1;
@@ -6467,7 +6467,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     private boolean isHwKeysDisabled() {
-        return mKeyHandler != null ? mKeyHandler.isHwKeysDisabled() : false;
+        return mHardKeyHandler != null ? mHardKeyHandler.isHwKeysDisabled() : false;
     }
 
     // Assume this is called from the Handler thread.
