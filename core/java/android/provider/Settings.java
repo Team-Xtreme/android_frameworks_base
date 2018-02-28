@@ -5077,7 +5077,7 @@ public final class Settings {
             STATUSBAR_CLOCK_DATE_STYLE,
             STATUSBAR_CLOCK_DATE_FORMAT,
             LOCKSCREEN_VISUALIZER_ENABLED,
-            AMBIENT_VISUALIZER_ENABLED
+            AMBIENT_VISUALIZER_ENABLED,
             GESTURES_ENABLED,
             GESTURE_DOUBLE_TAP,
             GESTURE_DRAW_V,

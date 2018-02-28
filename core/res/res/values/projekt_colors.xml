@@ -20,7 +20,7 @@
     <color name="toast_bg_color">#E6EEEEEE</color>
     <color name="toast_text_color">@color/primary_text_default_material_light</color>
 
-    <!-- App permission tint -->
-    <color name="app_permission_icon_tint">@android:color/black</color>
+    <!-- App permission tint 
+    <color name="app_permission_icon_tint">@android:color/black</color-->
 
 </resources>

@@ -862,7 +862,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mVolumeMusicControlActive;
     private boolean mVolumeMusicControl;
     private boolean mVolumeWakeActive;
-    private HardkeyActionHandler mKeyHandler;
 
     private int mTorchActionMode;
 
@@ -2185,12 +2184,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         try {
             mOrientationListener.setCurrentRotation(windowManager.getDefaultDisplayRotation());
         } catch (RemoteException ex) { }
-
-        // only for hwkey devices
-        if (!mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_showNavigationBar)) {
-            mKeyHandler = new HardkeyActionHandler(mContext, mHandler);
-        }
 
         mSettingsObserver = new SettingsObserver(mHandler);
         mSettingsObserver.observe();
