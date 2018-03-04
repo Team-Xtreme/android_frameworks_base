@@ -261,8 +261,8 @@ public class NavigationBarTile extends QSTileImpl<BooleanState> {
 
         @Override
         public int getMetricsCategory() {
-            return MetricsEvent.EXTENSIONS;
-        }   
+            return MetricsEvent.NITROGEN_SETTINGS;
+        }
 
         @Override
         public CharSequence getTitle() {
