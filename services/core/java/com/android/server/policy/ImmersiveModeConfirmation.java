@@ -381,8 +381,6 @@ public class ImmersiveModeConfirmation {
 
         @Override
         public void handleMessage(Message msg) {
-            if (Settings.System.getInt(mContext.getContentResolver(),
-                     Settings.System.DISABLE_IMMERSIVE_MESSAGE, 0) != 1) {
             switch(msg.what) {
                 case SHOW:
                     handleShow();
@@ -390,9 +388,6 @@ public class ImmersiveModeConfirmation {
                 case HIDE:
                     handleHide();
                     break;
-                }
-            } else {
-                handleHide();
             }
         }
     }
