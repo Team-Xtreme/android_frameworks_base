@@ -274,9 +274,9 @@ public class NotificationPanelView extends PanelView implements
     private GestureDetector mDoubleTapToSleepGesture;
     private boolean mIsLockscreenDoubleTapEnabled;
     private int mStatusBarHeaderHeight;
-    private Handler mHandler = new Handler();
+/*    private Handler mHandler = new Handler();
     private SettingsObserver mSettingsObserver;
-
+*/
     private int mOneFingerQuickSettingsIntercept;
     private int mQsSmartPullDown;
 
@@ -2782,6 +2782,19 @@ public class NotificationPanelView extends PanelView implements
                     Settings.System.QS_SMART_PULLDOWN), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.LOCK_QS_DISABLED), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BLUR_SCALE_PREFERENCE_KEY), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BLUR_RADIUS_PREFERENCE_KEY), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_EXPANDED_ENABLED_PREFERENCE_KEY), false, this);
+
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BLUR_DARK_COLOR_PREFERENCE_KEY), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BLUR_LIGHT_COLOR_PREFERENCE_KEY), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BLUR_MIXED_COLOR_PREFERENCE_KEY), false, this);
             update();
         }
 
@@ -2807,10 +2820,23 @@ public class NotificationPanelView extends PanelView implements
                     UserHandle.USER_CURRENT);
             mQsSmartPullDown = Settings.System.getIntForUser(resolver,
                     Settings.System.QS_SMART_PULLDOWN, 0, UserHandle.USER_CURRENT);
-
             mQsSecureExpandDisabled = Settings.Secure.getIntForUser(
                     mContext.getContentResolver(), Settings.Secure.LOCK_QS_DISABLED, 0,
                     UserHandle.USER_CURRENT) != 0;
+            mBlurScale = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.BLUR_SCALE_PREFERENCE_KEY, 10);
+            mBlurRadius = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.BLUR_RADIUS_PREFERENCE_KEY, 5);
+            mBlurredStatusBarExpandedEnabled = Settings.System.getIntForUser(resolver,
+                    Settings.System.STATUS_BAR_EXPANDED_ENABLED_PREFERENCE_KEY, 0, UserHandle.USER_CURRENT) == 1;
+
+            mBlurDarkColorFilter = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.BLUR_DARK_COLOR_PREFERENCE_KEY, Color.LTGRAY);
+            mBlurMixedColorFilter = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.BLUR_MIXED_COLOR_PREFERENCE_KEY, Color.GRAY);
+            mBlurLightColorFilter = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.BLUR_LIGHT_COLOR_PREFERENCE_KEY, Color.DKGRAY);
+            mTranslucencyPercentage = 255 - ((mTranslucencyPercentage * 255) / 100);
         }
     }
 
@@ -3026,12 +3052,12 @@ public class NotificationPanelView extends PanelView implements
         new BlurTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
      }
 
-    class SettingsObserver extends UserContentObserver {
+/*    class SettingsObserver extends UserContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
         }
 
-        @Override
+       @Override
         protected void observe() {
             super.observe();
             ContentResolver resolver = mContext.getContentResolver();
@@ -3086,7 +3112,7 @@ public class NotificationPanelView extends PanelView implements
             mTranslucencyPercentage = 255 - ((mTranslucencyPercentage * 255) / 100);
         }
     }
-
+*/
     public void initBlurPrefs() {
             mNotificationPanelView = this;
 
