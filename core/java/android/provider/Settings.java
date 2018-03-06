@@ -8372,6 +8372,13 @@ public final class Settings {
         public static final String AMBIENT_PLAY_LOCKSCREEN = "ambient_play_lockscreen";
 
         /**
+         * Whether Ambient Weather is shown on the lockscreen
+         *
+         * @hide
+         */
+        public static final String AMBIENT_WEATHER_LOCKSCREEN = "ambient_weather_lockscreen";
+
+        /**
          * Whether or not the automatic storage manager is enabled and should run on the device.
          *
          * @hide

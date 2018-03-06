@@ -195,5 +195,8 @@
 
     <!-- Weather string format in expanded statusbar header -->
     <string name="status_bar_weather_format"><xliff:g id="temp">%1$s</xliff:g></string>
-</resources>
 
+    <!-- The contents of the Ambient Weather result -->
+    <string name="ambient_weather_condition_information">%1$s &amp; %2$s in %3$s</string>
+
+</resources>
