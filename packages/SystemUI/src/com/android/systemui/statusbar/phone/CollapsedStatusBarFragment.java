@@ -151,6 +151,12 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             mContentResolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUSBAR_CLOCK_DATE_POSITION),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_CLOCK_SIZE),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_CLOCK_FONT_STYLE),
+                    false, this, UserHandle.USER_ALL);
             getContext().getContentResolver().registerContentObserver(
                     Settings.System.getUriFor(Settings.System.STATUS_BAR_CARRIER),
                     false, this, UserHandle.USER_ALL);
@@ -167,6 +173,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             mStatusBarComponent.updateQsbhClock();
 
             mStatusBarComponent.updateBatterySettings();
+            updateClockFont();
+            updateClockSize();
             updateSettings(true);
         }
     }
@@ -448,5 +456,23 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         } else {
             animateHide(mCustomCarrierLabel, animate, false);
         }
+    }
+
+    private void updateClockSize() {
+        int size = Settings.System.getInt(mContentResolver,
+			    Settings.System.STATUS_BAR_CLOCK_SIZE, 14);
+        mClockDefault.setClockSize(size);
+        mClockCentered.setClockSize(size);
+        mLeftClock.setClockSize(size);
+
+    }
+
+    private void updateClockFont() {
+        int size = Settings.System.getInt(mContentResolver,
+			    Settings.System.STATUS_BAR_CLOCK_FONT_STYLE, 0);
+        mClockDefault.setClockStyle(size);
+        mClockCentered.setClockStyle(size);
+        mLeftClock.setClockStyle(size);
+
     }
 }
