@@ -25,6 +25,7 @@ import android.app.StatusBarManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.ContentObserver;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.UserHandle;
@@ -53,6 +54,7 @@ import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NetworkController.SignalCallback;
 import com.android.systemui.tuner.TunerService;
 
+import com.android.systemui.nitrogen.carrierlabel.CarrierLabel;
 /**
  * Contains the collapsed status bar and handles hiding/showing based on disable flags
  * and keyguard state. Also manages lifecycle to make sure the views it contains are being
@@ -89,9 +91,11 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     private static final String STATUS_BAR_SHOW_TICKER =
             "system:" + Settings.System.STATUS_BAR_SHOW_TICKER;
+
     // Custom Carrier
     private View mCustomCarrierLabel;
     private int mShowCarrierLabel;
+    private int mCarrierFontSize;
 
     private SignalCallback mSignalCallback = new SignalCallback() {
         @Override
