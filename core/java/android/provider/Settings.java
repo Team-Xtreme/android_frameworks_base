@@ -5202,9 +5202,6 @@ public final class Settings {
          */
         public static final String VOLUME_DIALOG_STROKE_DASH_GAP = "volume_dialog_stroke_dash_gap";
 
-
-        public static final String VOLUME_DIALOG_STROKE_DASH_GAP = "volume_dialog_stroke_dash_gap";
-
         /**
          * Transparent power menu and dialogs
          * @hide
