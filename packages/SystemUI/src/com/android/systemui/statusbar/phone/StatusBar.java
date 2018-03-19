@@ -1223,7 +1223,7 @@ public class StatusBar extends SystemUI implements DemoMode,
                         mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         setMediaPlaying();
 
-        boolean showNav = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+        boolean showNav = Settings.Secure.getInt(mContext.getContentResolver(),
                 Settings.Secure.NAVIGATION_BAR_VISIBLE,
                 DUActionUtils.hasNavbarByDefault(mContext) ? 1 : 0) != 0;
         if (DEBUG)
